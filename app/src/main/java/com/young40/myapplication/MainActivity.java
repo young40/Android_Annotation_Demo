@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick");
-                MainActivity.this.jsevent("js1");
-                MainActivity.this.jsevent("js2");
+                MainActivity.this.jsevent("js1", "arg strs js1");
+                MainActivity.this.jsevent("js2", "arg strs js2");
             }
         });
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void jsevent(String event) {
+    private void jsevent(String event, String msg) {
         Log.d(TAG, "jsevent");
 
         List<Method> methods = getMethodAnnotatedJsEvent(MainActivity.class);
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "got methed by: " + event);
 
             try {
-                method.invoke(this, null);
+                method.invoke(this, msg);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -90,13 +90,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @JSEvent(event = "js1")
-    private void onJSMethod1() {
-        Log.d(TAG, "onJSMethod1");
+    private void onJSMethod1(String msg) {
+        Log.d(TAG, "onJSMethod1: " + msg);
     }
 
     @JSEvent(event = "js2")
-    private void onJSMethod2() {
-        Log.d(TAG, "onJSMethod2");
+    private void onJSMethod2(String msg) {
+        Log.d(TAG, "onJSMethod2: " + msg);
     }
 
     private static List<Method> getMethodAnnotatedJsEvent(final Class<?> type) {
